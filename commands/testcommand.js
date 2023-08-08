@@ -1,3 +1,8 @@
+/*
+	Test Command.
+	This command will eventually spit out some information needing
+	for testing. This will be used for testing purposes only.
+ */
 // Imports.
 const { SlashCommandBuilder } = require('discord.js');
 

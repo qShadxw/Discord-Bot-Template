@@ -1,3 +1,8 @@
+/*
+	Ping Command.
+	Simple command that replies with Pong!
+	To test if the bot is working.
+ */
 // Imports.
 const { SlashCommandBuilder } = require('discord.js');
 

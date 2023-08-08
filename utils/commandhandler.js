@@ -5,6 +5,10 @@ const { Collection } = require('discord.js');
 const Logger = require("./logger.js")
 
 module.exports = {
+	/**
+	 * Gets all the commands in the commands folder.
+	 * @returns {[]}
+	 */
 	getCommands: function() {
 		// Creates new collection for commands.
 		let commands = new Collection();

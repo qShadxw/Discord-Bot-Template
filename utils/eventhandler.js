@@ -4,6 +4,10 @@ const filePath = require('node:path');
 const Logger = require("./logger.js")
 
 module.exports = {
+	/**
+	 * Registers all the events in the events folder.
+	 * @param client {Client}
+	 */
 	registerEvents: function(client) {
 		// Gets all command files - Filters out non .js files.
 		const eventsPath = filePath.join(__dirname, "..", "events");
@@ -22,8 +26,6 @@ module.exports = {
 
 			// Logs that the command has been loaded.
 			Logger.log('EventHandler', `Registered ${file}.`);
-
 		}
-
 	}
 }
