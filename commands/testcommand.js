@@ -6,7 +6,6 @@
 // Imports.
 const { SlashCommandBuilder } = require('discord.js');
 
-// Exports Ping Command. { data, execute }
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('test')

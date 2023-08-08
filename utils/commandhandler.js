@@ -7,11 +7,11 @@ const Logger = require("./logger.js")
 module.exports = {
 	/**
 	 * Gets all the commands in the commands folder.
-	 * @returns {[]}
+	 * @param client {Client}
 	 */
-	getCommands: function() {
+	registerCommands: function(client) {
 		// Creates new collection for commands.
-		let commands = new Collection();
+		client.commands = new Collection();
 
 		// Gets all command files - Filters out non .js files.
 		const commandsPath = filePath.join(__dirname, "..", "commands");
@@ -31,9 +31,7 @@ module.exports = {
 			Logger.log('CommandHandler', `Loaded ${file}.`);
 
 			// Adds the command to the collection.
-			commands.set(command.data.name, command);
+			client.commands.set(command.data.name, command);
 		}
-
-		return commands;
 	}
 }

@@ -25,7 +25,7 @@ const client = new Client({
 EventHandler.registerEvents(client);
 
 // Registering Commands.
-client.commands = CommandHandler.getCommands();
+CommandHandler.registerCommands(client);
 
 // REST.
 const rest = new REST().setToken(process.env.CLIENT_TOKEN);
@@ -36,7 +36,7 @@ const rest = new REST().setToken(process.env.CLIENT_TOKEN);
 		Logger.log('REST', 'Started refreshing application (/) commands.');
 
 		const data = await rest.put(
-			Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.DEVELOPMENT_SERVER_ID),
+			Routes.applicationCommands(process.env.CLIENT_ID),
 			{ body: DeployCommands.getDeployment() },
 		);
 
