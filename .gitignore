@@ -1,5 +1,6 @@
 # User-specific stuff
 .idea/
+node_modules/
 
 *.iml
 *.ipr
