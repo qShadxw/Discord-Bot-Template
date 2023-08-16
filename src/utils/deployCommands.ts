@@ -1,70 +1,58 @@
 // Imports
-import { REST, RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord.js';
-import  Command  from '../interfaces/Command';
+import { REST, RESTPostAPIChatInputApplicationCommandsJSONBody, Routes } from 'discord.js';
+import Command from '../interfaces/Command';
+import commandHandler from './commandHandler';
 import * as fileSystem from 'fs';
 import * as filePath from 'path';
 import Logger from './logger';
+import config from '../config';
 
 export default {
-  getDeployment: function () {
-    // Creates new collection for commands.
-    const commands: Command[] = [];
+	/**
+	 * Creates a JSON representation of all registered Commands for global deployment.
+	 * @returns {RESTPostAPIChatInputApplicationCommandsJSONBody[]} The JSON body for the deployment.
+	 */
+	getDeploymentJson: function () {
+		// Creates new collection for commands.
+		const commands: RESTPostAPIChatInputApplicationCommandsJSONBody[] = [];
 
-    // Gets all command files - Filters out non .ts files.
-    const commandsPath = filePath.join(__dirname, '..', 'commands');
-    const commandFiles: string[] = fileSystem.readdirSync(commandsPath).filter(file => file.endsWith('.ts'));
+		const commandList = commandHandler.getCommands();
 
-    // Loads all the commands in the command's folder.
-    for (const file of commandFiles) {
-      const command: Command = require(filePath.join(commandsPath, file)).default;
+		commandList.forEach((command, name) => {
 
-      // Checks if the command has a valid structure.
-      if (!command || !command.data || !command.execute) {
-        Logger.log('DeploymentCommands', `${file} does not have a valid command structure.`);
-        continue;
-      }
 
-      console.log(command.data.toJSON());
-      // Adds the command to the collection.
-      commands.push(command);
-    }
+			// Checks if the command has a valid structure.
+			if (!command || !command.data || !command.execute) {
+				console.log(command);
+				Logger.log('DeploymentCommands', `${name} does not have a valid command structure.`);
+				return;
+			}
+			// Adds the command to the collection.
+			commands.push(command.data.toJSON());
+		});
 
-    return commands;
-  },
+		return commands;
+	},
 
-  getDeploymentJson: function () {
-    // Creates new collection for commands.
-    const commands: RESTPostAPIChatInputApplicationCommandsJSONBody[] = [];
-
-    // Gets all command files - Filters out non .ts files.
-    const commandsPath = filePath.join(__dirname, '..', 'commands');
-    const commandFiles: string[] = fileSystem.readdirSync(commandsPath).filter(file => file.endsWith('.ts'));
-
-    // Loads all the commands in the command's folder.
-    for (const file of commandFiles) {
-      const command: Command = require(filePath.join(commandsPath, file)).default;
-
-      // Checks if the command has a valid structure.
-      if (!command || !command.data || !command.execute) {
-        Logger.log('DeploymentCommands', `${file} does not have a valid command structure.`);
-        continue;
-      }
-      // Adds the command to the collection.
-      commands.push(command.data.toJSON());
-    }
-
-    return commands;
-  },
-
-  deployCommands: async function (rest: REST) {
-    const data = await rest.put(
-      // Replace CLIENT_ID with your actual client ID.
-      // You can also use rest.put(Routes.applicationCommands('@me'), { body: this.getDeployment() }) to deploy commands to your own account.
-      // See https://discord.com/developers/docs/interactions/application-commands#registering-a-command-guild for more information.
-      `/applications/${process.env.CLIENT_ID}/commands`,
-      { body: this.getDeployment() },
-    );
-
-    console.log(data);
-  },
+	/**
+	 * PUTs the global commands to Discord.
+	 * @param rest The REST object to use for deployment.
+	 */
+	deployCommands: async function (rest: REST) {
+		console.log('Started refreshing application (/) commands.');
+		const data = await rest.put(
+			Routes.applicationCommands(config.clientId),
+			{ body: this.getDeploymentJson() },
+		).then(() => {
+			console.log('Successfully reloaded application (/) commands.');
+			// Retrieve the list of global commands.
+			const globalCommands = rest.get(
+				Routes.applicationCommands(config.clientId),
+			).then((commandsList) => {
+				// Creates new collection for commands.
+				const commands: Command[] = commandsList as Command[];
+				console.log(`${commands.length} global commands registered.`);
+			});
+		});
+	},
 };

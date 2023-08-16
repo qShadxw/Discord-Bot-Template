@@ -26,26 +26,11 @@ function createClient() {
 	return client;
 }
 
-
-
 // REST.
 const rest = new REST().setToken(Config.clientToken);
 
-// Deploying Commands.
-(async () => {
-	try {
-		console.log('Started refreshing application (/) commands.');
-
-		await rest.put(
-			Routes.applicationCommands(Config.clientId),
-			{ body: DeployCommands.getDeploymentJson() },
-		);
-
-		console.log('Successfully reloaded application (/) commands.');
-	} catch (error) {
-		console.error(error);
-	}
-})();
+//export rest
+export { rest };
 
 // Create the client and log in.
 const client = createClient();

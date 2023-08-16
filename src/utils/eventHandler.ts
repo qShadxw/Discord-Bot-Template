@@ -2,12 +2,7 @@ import { Client } from "discord.js";
 import path from "path";
 import fs from "fs";
 import Logger from "./logger";
-
-interface Event {
-	name: string;
-	once: boolean;
-	execute: (...args: any[]) => void;
-}
+import BotEvent from "../interfaces/botEvent";
 
 export default {
 	/**
@@ -15,7 +10,11 @@ export default {
 	 * @param client {Client}
 	 */
 	registerEvents: function (client: Client) {
+		console.log("=============================================");
+		console.log("              EVENT HANDLER");
+		console.log("=============================================");
 		console.log("Registering events...");
+
 		// Gets all event files - Filters out non .js files.
 		const eventsPath: string = path.join(__dirname, "..", "events");
 		const eventFiles: string[] = fs.readdirSync(eventsPath).filter((file) => file.endsWith(".ts"));
@@ -23,8 +22,7 @@ export default {
 		// Loads all the events in the events folder.
 		for (const file of eventFiles) {
 			const eventPath: string = path.join(eventsPath, file);
-			console.log("Loading event..." + eventPath)
-			const event: Event = require(eventPath);
+			const event: BotEvent = require(eventPath);
 
 			if (event.once) {
 				console.log("Registering once event..." + event.name)
@@ -37,5 +35,8 @@ export default {
 			// Logs that the event has been loaded.
 			Logger.log("EventHandler", `Registered ${file}.`);
 		}
+
+		console.log("=============================================");
+
 	},
 };

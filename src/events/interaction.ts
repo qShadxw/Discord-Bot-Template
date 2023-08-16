@@ -1,25 +1,22 @@
 import { Interaction, Events } from 'discord.js';
 import Logger from '../utils/logger';
 import commandHandler from '../utils/commandHandler';
+import BotEvent from '../interfaces/botEvent'
 
 interface Command {
 	execute: (interaction: Interaction) => Promise<void>;
 }
 
-interface InteractionEvent {
-	name: string;
-	once: boolean;
-	execute: (interaction: Interaction) => Promise<void>;
-}
 
-const interactionEvent: InteractionEvent = {
+
+const interactionEvent: BotEvent = {
 	name: Events.InteractionCreate,
 	once: false,
 	async execute(interaction: Interaction) {
 		Logger.log("Interaction", 'Received interaction');
 		console.log(interaction)
 		if (!interaction.isCommand()) return;
-
+		console.log("Command received");
 		const command: Command | undefined = commandHandler.getCommands().get(interaction.commandName);
 
 		if (!command) {
@@ -36,4 +33,4 @@ const interactionEvent: InteractionEvent = {
 	},
 };
 
-export default interactionEvent;
+module.exports = interactionEvent;

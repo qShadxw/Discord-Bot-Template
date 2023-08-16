@@ -12,4 +12,4 @@ const fooCommand = {
   },
 };
 
-export default fooCommand;
+module.exports = fooCommand;
