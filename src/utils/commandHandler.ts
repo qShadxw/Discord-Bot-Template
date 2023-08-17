@@ -1,21 +1,27 @@
+import { Client } from "discord.js";
+import  Command  from "src/interfaces/Command"
+import logger from "./logger";
 // Imports
 const fileSystem = require('node:fs');
 const filePath = require('node:path');
-const { Collection } = require('discord.js');
-const Logger = require("./logger.js")
 
-module.exports = {
+
+
+// Define the commands array
+const commands: Map<string, Command> = new Map();
+
+
+export default {
+
 	/**
 	 * Gets all the commands in the commands folder.
 	 * @param client {Client}
 	 */
-	registerCommands: function(client) {
-		// Creates new collection for commands.
-		client.commands = new Collection();
+	registerCommands: function(client: Client) {
 
 		// Gets all command files - Filters out non .js files.
 		const commandsPath = filePath.join(__dirname, "..", "commands");
-		const commandFiles = fileSystem.readdirSync(commandsPath).filter(file => file.endsWith(".js"));
+		const commandFiles: string[] = fileSystem.readdirSync(commandsPath).filter((file: String) => file.endsWith(".ts"));
 
 		// Loads all the commands in the command's folder.
 		for (const file of commandFiles) {
@@ -23,15 +29,22 @@ module.exports = {
 
 			// Checks if the command has a valid structure.
 			if (command["data"] === undefined && command["execute"] === undefined) {
-				Logger.log('CommandHandler', `${file} does not have a valid command structure.`);
+				logger.log('CommandHandler', `${file} does not have a valid command structure.`);
 				continue;
 			}
 
 			// Logs that the command has been loaded.
-			Logger.log('CommandHandler', `Loaded ${file}.`);
+			logger.log('CommandHandler', `Loaded ${file}.`);
 
 			// Adds the command to the collection.
-			client.commands.set(command.data.name, command);
+			commands.set(command.data.name, command);
 		}
+	},
+
+	/**
+	 * @returns {Map<string, Command>} The commands collection.
+	 */
+	getCommands: function() {
+		return commands;
 	}
 }
