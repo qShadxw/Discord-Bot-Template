@@ -1,13 +1,8 @@
-import { Interaction, Events, CommandInteraction, CacheType } from 'discord.js';
+import { Interaction, Events } from 'discord.js';
 import Logger from '../utils/logger';
 import commandHandler from '../utils/commandHandler';
 import BotEvent from '../interfaces/botEvent'
-
-interface Command {
-	execute: (interaction: Interaction) => Promise<void>;
-}
-
-
+import Command from '../interfaces/Command';
 
 const interactionEvent: BotEvent = {
 	name: Events.InteractionCreate,
