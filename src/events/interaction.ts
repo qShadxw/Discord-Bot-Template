@@ -1,4 +1,4 @@
-import { Interaction, Events } from 'discord.js';
+import { Interaction, Events, CommandInteraction, CacheType } from 'discord.js';
 import Logger from '../utils/logger';
 import commandHandler from '../utils/commandHandler';
 import BotEvent from '../interfaces/botEvent'
@@ -13,10 +13,7 @@ const interactionEvent: BotEvent = {
 	name: Events.InteractionCreate,
 	once: false,
 	async execute(interaction: Interaction) {
-		Logger.log("Interaction", 'Received interaction');
-		console.log(interaction)
 		if (!interaction.isCommand()) return;
-		console.log("Command received");
 		const command: Command | undefined = commandHandler.getCommands().get(interaction.commandName);
 
 		if (!command) {

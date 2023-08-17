@@ -4,13 +4,14 @@
 	To test if the bot is working.
  */
 // Imports.
-import { SlashCommandBuilder } from 'discord.js';
+import { CommandInteraction, Interaction, SlashCommandBuilder } from 'discord.js';
 import Command from '../interfaces/Command';
 
-const pingCommand: Command = {
+ export const pingCommand: Command = {
 	data: new SlashCommandBuilder().setName('ping').setDescription('Replies with Pong!'),
 	async execute(interaction) {
-		await interaction.reply('Pong!');
+		let action = interaction as CommandInteraction;
+		await action.reply('Pong!');
 	},
 };
 

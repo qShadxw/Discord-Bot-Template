@@ -1,14 +1,16 @@
 // Imports.
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { CommandInteraction } from 'discord.js';
+import { CommandInteraction, Interaction } from 'discord.js';
+import Command from 'src/interfaces/Command';
 
-const fooCommand = {
+const fooCommand: Command = {
   data: new SlashCommandBuilder()
     .setName('foo')
     .setDescription('Test Command!'),
-  async execute(interaction: CommandInteraction) {
+  async execute(interaction: Interaction) {
+	let action = interaction as CommandInteraction;
     // Reply with Pong!
-    await interaction.reply('bar');
+    await action.reply('bar');
   },
 };
 
