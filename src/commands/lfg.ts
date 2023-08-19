@@ -68,11 +68,11 @@ const lfgCommand: Command = {
 						.map((user: any) => user.discord_id);
 
 					action.deleteReply();
-					let tagString = '';
+					let stringBuilder: string[] = [];
 					selectedUserNames.forEach((id: string) => {
-						tagString += `<@${id}> `;
+						stringBuilder.push(`<@${id}>`);
 					});
-					action.channel?.send(`<@${interaction.user.id}> would like to play ${gameName} with ${tagString}.`);
+					action.channel?.send(`<@${interaction.user.id}> would like to play ${gameName} with ${stringBuilder}.`);
 				}
 			}
 
