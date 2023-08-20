@@ -3,7 +3,7 @@ import { Client, Events } from 'discord.js';
 import Logger from '../utils/logger';
 import BotEvent from 'src/interfaces/botEvent';
 import DeployCommands from '../utils/deployCommands';
-import { rest } from '../index';
+import { rest } from '../app';
 
 const readyEvent: BotEvent = {
 	name: 'ready',

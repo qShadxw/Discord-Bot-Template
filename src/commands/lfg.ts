@@ -28,9 +28,9 @@ const lfgCommand: Command = {
 			const data = await axios.get(`${config.baseURL}/api/lfg/find?game=${gameName}&server=${serverId}`);
 
 			const users = data.data['data'] ?? [];
-			
-			if(users.length === 0) {
-				await action.reply({content: 'No users found with that game', ephemeral: true});
+
+			if (users.length === 0) {
+				await action.reply({ content: 'No users found with that game', ephemeral: true });
 				return;
 			}
 			const selectMenu = new StringSelectMenuBuilder()
@@ -47,6 +47,8 @@ const lfgCommand: Command = {
 
 			const row = new ActionRowBuilder()
 				.addComponents(selectMenu).toJSON();
+
+			if (action.deferred || action.replied) return;
 
 			const response = await action.reply({
 				content: 'Who do you want to tag?',
@@ -72,13 +74,13 @@ const lfgCommand: Command = {
 					selectedUserNames.forEach((id: string) => {
 						stringBuilder.push(`<@${id}>`);
 					});
-					action.channel?.send(`<@${interaction.user.id}> would like to play ${gameName} with ${stringBuilder}.`);
+					action.channel?.send(`<@${interaction.user.id}> would like to play ${gameName} with ${stringBuilder.join(' ')}.`);
 				}
 			}
 
 		} catch (error) {
 			console.error(error);
-			await action.reply({content: 'An error occurred while searching for LFG users', ephemeral: true});
+			await action.reply({ content: 'An error occurred while searching for LFG users', ephemeral: true });
 		}
 	},
 };
