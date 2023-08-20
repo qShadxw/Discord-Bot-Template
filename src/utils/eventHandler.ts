@@ -17,6 +17,7 @@ export default {
 
 		// Gets all event files - Filters out non .js files.
 		const eventsPath: string = path.join(__dirname, "..", "events");
+		Logger.log("EventHandler", `Loading events from ${eventsPath}.`);
 		const eventFiles: string[] = fs.readdirSync(eventsPath).filter((file) => file.endsWith(".ts"));
 		console.log("Found " + eventFiles.length + " events.")
 		// Loads all the events in the events folder.
