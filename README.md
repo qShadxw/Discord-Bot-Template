@@ -4,6 +4,6 @@
 - Unzip the contents into a folder then rename the .env.example to .env and fill in the fields that don't have information or dummy information.
 - Open a commandline to that directory.
 ```
-node i
+npm i
 node .
 ```
